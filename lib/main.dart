@@ -58,61 +58,75 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     controllerC.getApiData();
 
-
     return RefreshIndicator(
       key: _refreshIndicatorKey,
       onRefresh: () {
-        return Future.delayed(const Duration(seconds: 1), () async {});
+        return Future.delayed(const Duration(seconds: 1), () async {
+          controllerC.getApiData();
+        });
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text("title"),
+          title: Center(child: const Text("Weathe")),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Show Data',
-              ),
-              Obx(
-                  () =>controllerC.modelDataCallVar.value.daily != null
-                    ? ListView.builder(
-
-                  shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 3,
-                        itemBuilder: (context, index) {
-                          return Center(
-                            child: Row(
-                              children: [
-                                Text(
-                                    "${controllerC.modelDataCallVar.value.daily!.temperature2mMax![index]}"),
-                                Text(
-                                    "${controllerC.modelDataCallVar.value.daily!.temperature2mMin![index]}"),
-                                Text(controllerC
-                                    .modelDataCallVar.value.daily!.time![index]),
-                                Text(
-                                    "${controllerC.modelDataCallVar.value.timezoneAbbreviation}"),
-                                const Icon(
-                                  Icons.water_drop,
-                                  size: 10,
-                                  color: Colors.deepPurple,
-                                ),
-                              ],
-                            ),
-                          );
-                        })
-                    : const Center(
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: CircularProgressIndicator(),
+        body: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'Show Data',
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Obx(
+                  () => controllerC.modelDataCallVar.value.daily != null
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                          "${controllerC.modelDataCallVar.value.daily!.temperature2mMax![index]}"),
+                                      Text(
+                                          "${controllerC.modelDataCallVar.value.daily!.temperature2mMin![index]}"),
+                                    ],
+                                  ),
+                                  Text(controllerC.modelDataCallVar.value.daily!
+                                      .time![index]),
+                                  Text(
+                                      "${controllerC.modelDataCallVar.value.timezoneAbbreviation}"),
+                                  const Icon(
+                                    Icons.water_drop,
+                                    size: 10,
+                                    color: Colors.deepPurple,
+                                  ),
+                                ],
+                              ),
+                            );
+                          })
+                      : const Center(
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
-                      ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
